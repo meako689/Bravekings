@@ -7,4 +7,3 @@ https://docs.google.com/document/d/1srScdyqol-EquzqLeVGxk3VBoEPwJ9iqA-bTud3hfNM/
 
 Files:
 objects.py(classes of cards)
-ya rulu fishkoy fishka rulit mnoy
