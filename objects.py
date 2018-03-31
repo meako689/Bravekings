@@ -1,11 +1,11 @@
-class table:
+class Table:
 	def __init__(self, players):
 		self.players = [
 			Player(name, Hand()) for name in players]
 		self.deck = Deck()
 		self.rounds = 0
 
-class player:
+class Player:
 	def __init__(self, name, hand):
 		self.name = name
 		self.hand = hand
@@ -17,7 +17,7 @@ class player:
 		if self.hand.has_cards:
 			collection.add_card(self.hand_take_top(), self)
 
-class hand:
+class Hand:
 	def __init__(self):
 		self.cards = []
 
@@ -33,7 +33,7 @@ class hand:
 	def has_cards(self):
 		return bool(self.cards)
 
-class deck:
+class Deck:
 	def __init__(self):
 		self.cards = [
 			
