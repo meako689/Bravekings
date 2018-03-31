@@ -1,3 +1,5 @@
+from random import shuffle
+
 class Table:
 	def __init__(self, players):
 		self.players = [
@@ -35,6 +37,17 @@ class Hand:
 
 class Deck:
 	def __init__(self):
-		self.cards = [
-			
+		cards = int(80)
+	def create_deck(cards):
 		
+
+class Card:
+	def __init__(self):
+		hp = int()
+		damage = int()
+		type = [ warrior, archer, mage]
+
+class King:
+	def __init__(self):
+		king = True
+		hp = int(50)
