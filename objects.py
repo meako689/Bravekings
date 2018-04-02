@@ -1,4 +1,4 @@
-from random import shuffle
+import random
 
 class Table:
 	def __init__(self, players):
@@ -6,6 +6,26 @@ class Table:
 			Player(name, Hand()) for name in players]
 		self.deck = Deck()
 		self.rounds = 0
+	def deal_cards(self):
+        self.deck.shuffle()
+        self.deck.setup_hands(self.players)
+        for player in self.players:
+            player.show_hand()
+    def count_round(self):
+        self.rounds += 1
+        print_underline('Starting round {}'.format(self.rounds), '=')
+    def play_all(self):
+        while not self.finished:
+            self.play_once()
+        self.show_winner()
+    def show_winner(self):
+        for player in self.players:
+            if player.hand.has_cards:
+                print()
+                print(player.name, 'wins!')
+                break
+    def finished(self):
+        return sum(bool(player.hand.cards) for player in self.players) == 1
 
 class Player:
 	def __init__(self, name, hand):
@@ -51,3 +71,13 @@ class King:
 	def __init__(self):
 		king = True
 		hp = int(50)
+
+class Game:
+	def main():
+		table = Table([ player1, player2])
+		player1 = str(input("Write your name:"))
+		player2 = str(input("Write your name:"))
+		table.deal_cards()
+		table.play_all()
+
+main()
