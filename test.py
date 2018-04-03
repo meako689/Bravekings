@@ -1,7 +1,7 @@
 import random
 
-player1_name = input('Write Player 1 name')
-player2_name = input('Write Player 2 name')
+player1_name = input('Write Player 1 name: ')
+player2_name = input('Write Player 2 name: ')
 player1_cards = [Card(), Card(), Card()]
 player2_cards = [Card(), Card(), Card()]
 player1_king = King()
@@ -40,6 +40,23 @@ class Table:
 while not table.winner:
 	rounds = 3
 	while rounds:
-		print()
+		rounds = rounds - 1
+		print('First round starts')
+		print(player1)
+		cards = input('What card to put?(From 1 to 3):  ')
+		if cards == 1:
+			question = input('Thats all? Y/N')
+			if question == 'Y':
+				print(player1_cards[0])
+				player1_cards= player1_cards - 1
+			else:
+				input('What card to put?(From 2 to 3): ')
+				if input == 2:
+					print(player1_cards[0, 1])
+				else:
+					print(player1_cards[0, 1, 2])
+
+
+
 
 
