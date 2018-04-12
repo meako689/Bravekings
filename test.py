@@ -20,7 +20,7 @@ class Card:
 		self.type = random.choice(self.types)
 
 	def __str__(self):
-		return "Card: HP: {}, DMG: {}, TYPE: {}".format(self.hp, self.dmg, self.type) 
+		return "Card: HP: {}, DMG: {}, TYPE: {} ".format(self.hp, self.dmg, self.type) 
 
 	def __repr__(self):
 		return self.__str__()
@@ -44,7 +44,7 @@ class Player:
 			card_indx = int(input('What card to put?(From 1 to 3):  ')) - 1
 			table_card = self.hand.pop(card_indx)
 			self.table_cards.append(table_card)	
-			question = input("That`s all? Y/N")
+			question = input("That`s all? Y/N: ")
 			if question == 'Y':
 				break
 
