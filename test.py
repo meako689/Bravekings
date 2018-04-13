@@ -26,7 +26,10 @@ class Card:
 		return self.__str__()
 
 	def attack(self, enemy_card):
-		enemy_card.hp = enemy_card.hp - self.dmg 
+		enemy_card.hp = enemy_card.hp - self.dmg
+
+	def king_attack(self, enemy_king):
+		enemy_king.hp = enemy_king.hp - self.dmg
 
 class Player:
 	def __init__(self, name, king, cards):
@@ -36,7 +39,7 @@ class Player:
 		self.table_cards = []
 
 	def take_cards(self):
-		self.hand = [Card(), Card(), Card()]
+		self.hand = [ Card(), Card(), Card()]
 
 	def put_cards(self):
 		print(self.name, self.king, self.hand)
@@ -57,17 +60,64 @@ class Table:
 		self.winner = None
 
 	def battle(self, me, enemy):
+		print('/////////////Battle\\\\\\\\\\\\\\')
 		print("Table:  ")
-		print("Player: {}, Cards: {}".format(me.name, me.table_cards))
-		print("Player: {}, Cards: {}".format(enemy.name, enemy.table_cards))
+		print("Player: {}, {}, Cards: {}".format(me.name, me.king, me.table_cards))
+		print("Player: {}, {}, Cards: {}".format(enemy.name, enemy.king, enemy.table_cards))
+		print('\\\\\\\\\\\\\\      /////////////')
 		for card in me.table_cards:
 			battle_quest = int(input("Choose card which to attack:  ")) - 1
 			enemy_card = enemy.table_cards[battle_quest]
 			card.attack(enemy_card)
 			if enemy_card.hp <= 0:
-				enemy.table_cards.pop(battle_quest)
+				enemy.table_cards.pop(battle_quest)	
 
+class Game:
+	def first_round():
+		print('First round starts') 
+		player1.take_cards()
+		player2.take_cards()
+		while player1.hand or player2.hand:
+			player1.put_cards()
+			player2.put_cards()
+			while player1.table_cards and player2.table_cards:
+				table.battle(player1, player2)
+				table.battle(player2, player1)
+		if player1.table_cards:
+			round_winner = player1
+			round_loser = player2
+			print("Winner ", round_winner)
+			print("Loser ", round_loser)
+		else:
+			round_winner = player2
+			round_loser = player1
+			print("Winner ", round_winner)
+			print("Loser ", round_loser)
+		for card in round_winner.table_cards:
+			card.king_attack(round_loser.enemy_king)
 
+	def second_round():
+		print('Second round starts') 
+		player1.take_cards()
+		player2.take_cards()
+		while player1.hand or player2.hand:
+			player1.put_cards()
+			player2.put_cards()
+			while player1.table_cards and player2.table_cards:
+				table.battle(player1, player2)
+				table.battle(player2, player1)
+		if player1.table_cards:
+			round_winner = player1
+			round_loser = player2
+			print("Winner " + round_winner)
+			print("Loser " + round_loser)
+		else:
+			round_winner = player2
+			round_loser = player1
+			print("Winner " + round_winner)
+			print("Loser " + round_loser)
+		for card in round_winner.table_cards:
+			card.king_attack(round_loser.enemy_king)
 
 
 player1 = Player(input('Write Player 1 name: '),
@@ -83,21 +133,4 @@ while not table.winner:
 	rounds = 3
 	while rounds:
 		rounds = rounds - 1
-		print('First round starts') 
-		player1.take_cards()
-		player2.take_cards()
-		while player1.hand or player2.hand:
-			player1.put_cards()
-			player2.put_cards()
-			while player1.table_cards and player2.table_cards:
-				table.battle(player1, player2)
-				table.battle(player2, player1)
-		if player1.table_cards:
-			round_winner = player1
-			round_loser = player2
-		else:
-			round_winner = player2
-			round_loser = player1
-		for card in round_winner.table_cards:
-			card.attack(round_loser.enemy_card)
-
+		Game.first_round()
