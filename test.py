@@ -1,5 +1,15 @@
 import random
+import string
+import os
 
+card_count = 0
+
+os.system('color 0a')
+
+def card_name():
+	global card_count
+	card_count += 1
+	return string.ascii_lowercase[card_count]
 
 
 class King:
@@ -18,18 +28,17 @@ class Card:
 		self.hp = random.randint(1, 5)
 		self.dmg = random.randint(1, 10)
 		self.type = random.choice(self.types)
+		self.name = card_name()
 
 	def __str__(self):
-		return "Card: HP: {}, DMG: {}, TYPE: {} ".format(self.hp, self.dmg, self.type) 
+		return "Card: {}, HP: {}, DMG: {}, TYPE: {} ".format(self.name, self.hp, self.dmg, self.type) 
 
 	def __repr__(self):
 		return self.__str__()
 
 	def attack(self, enemy_card):
 		enemy_card.hp = enemy_card.hp - self.dmg
-
-	def king_attack(self, enemy_king):
-		enemy_king.hp = enemy_king.hp - self.dmg
+		self.hp = self.hp - enemy_card.dmg
 
 class Player:
 	def __init__(self, name, king, cards):
@@ -44,8 +53,10 @@ class Player:
 	def put_cards(self):
 		print(self.name, self.king, self.hand)
 		while self.hand:
-			card_indx = int(input('What card to put?(From 1 to 3):  ')) - 1
-			table_card = self.hand.pop(card_indx)
+			card_name = input('What card to put?  ')
+			table_card = filter(lambda card: card.name == card_name, self.hand).__next__()
+			index = self.hand.index(table_card)
+			self.hand.pop(index)
 			self.table_cards.append(table_card)	
 			question = input("That`s all? Y/N: ")
 			if question == 'Y':
@@ -66,11 +77,13 @@ class Table:
 		print("Player: {}, {}, Cards: {}".format(enemy.name, enemy.king, enemy.table_cards))
 		print('\\\\\\\\\\\\\\      /////////////')
 		for card in me.table_cards:
-			battle_quest = int(input("Choose card which to attack:  ")) - 1
-			enemy_card = enemy.table_cards[battle_quest]
+			battle_quest = input("Choose card which to attack:  ")
+			enemy_card = filter(lambda card: card.name == battle_quest, enemy.table_cards).__next__()
 			card.attack(enemy_card)
 			if enemy_card.hp <= 0:
-				enemy.table_cards.pop(battle_quest)	
+				enemy.table_cards.pop(enemy.table_cards.index(enemy_card))
+			if card.hp <= 0:
+				me.table_cards.pop(me.table_cards.index(card))	
 
 class Game:
 	def first_round():
@@ -94,7 +107,7 @@ class Game:
 			print("Winner ", round_winner)
 			print("Loser ", round_loser)
 		for card in round_winner.table_cards:
-			card.king_attack(round_loser.enemy_king)
+			card.attack(round_loser.enemy_king)
 
 	def second_round():
 		print('Second round starts') 
