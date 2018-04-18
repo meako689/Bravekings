@@ -62,16 +62,15 @@ class Player:
 	def put_cards(self):
 		print(self.name, self.king, self.hand)
 		while self.hand:
-			card_name = input('What card to put?  ')
+			card_name = input('What card to put? Or press enter to finish.')
+			if not card_name:
+				break
 			table_card = self.find_card_by_name(card_name, self.hand)
 			if not table_card:
 				continue
 			index = self.hand.index(table_card)
 			self.hand.pop(index)
 			self.table_cards.append(table_card)	
-			question = input("That`s all? Y/N: ")
-			if question == 'Y':
-				break
 
 
 
@@ -101,13 +100,12 @@ class Table:
 		
 			enemy_card = enemy.find_card_by_name(battle_quest, enemy.table_cards)
 			if not enemy_card:
-				print ("No such card, go fuck yourself")
-				return
+				print ("No such card. Not atacking anyone")
+				continue
 
 			card.attack(enemy_card)
 			if enemy_card.hp <= 0:
 				enemy.table_cards.pop(enemy.table_cards.index(enemy_card))
-		import pdb; pdb.set_trace()
 		me.table_cards = list(
 			filter(lambda c: c.hp > 0, me.table_cards)) # remove dead cards
 
