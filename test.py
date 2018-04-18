@@ -150,6 +150,9 @@ class Game:
 			for card in round_winner.table_cards:
 				print("{} king {} damaged".format(round_loser.name, card.dmg))
 				card.attack(round_loser.king)
+				if round_loser.king.hp <=0:
+					raise KingIsDead()
+				return
 
 
 
