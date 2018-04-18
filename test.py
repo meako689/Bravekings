@@ -8,8 +8,12 @@ os.system('color 0a')
 
 def card_name():
 	global card_count
-	card_count += 1
-	return string.ascii_lowercase[card_count]
+	name = string.ascii_lowercase[card_count]
+	if card_count < len(string.ascii_lowercase):
+		card_count += 1
+	else:
+		card_count = 0
+	return name
 
 
 class King:
@@ -28,8 +32,7 @@ class Card:
 	types = 'Warrior Archer Mage'.split( )
 	
 	def __init__(self):
-#		self.hp = random.randint(1, 5)
-		self.hp = 5 
+		self.hp = random.randint(1, 5)
 		self.dmg = random.randint(1, 10)
 		self.type = random.choice(self.types)
 		self.name = card_name()
@@ -40,10 +43,11 @@ class Card:
 	def __repr__(self):
 		return self.__str__()
 
-	def attack(self, enemy_card):
+	def attack(self, enemy_card, silent=False):
 		enemy_card.hp = enemy_card.hp - self.dmg
 		self.hp = self.hp - enemy_card.dmg
-		print("Card HP: {}, Enemy Card HP: {}".format(self.hp, enemy_card.hp))
+		if not silent:
+			print("Card HP: {}, Enemy Card HP: {}".format(self.hp, enemy_card.hp))
 
 
 class Player:
@@ -60,9 +64,10 @@ class Player:
 		return next(filter(lambda card: card.name == name, where), None)
 
 	def put_cards(self):
+		print('*'*10)
 		print(self.name, self.king, self.hand)
 		while self.hand:
-			card_name = input('What card to put? Or press enter to finish.')
+			card_name = input('What card to put? Or press enter to finish.\n')
 			if not card_name:
 				break
 			table_card = self.find_card_by_name(card_name, self.hand)
@@ -93,7 +98,7 @@ class Table:
 				print("You can type 'king' to attack king!")
 			battle_quest = input("Player {}: Attack Card {}, Choose card which to attack:  ".format(me.name, card.name))
 			if attack_king and battle_quest == 'king':
-				card.attack(enemy.king)
+				card.attack(enemy.king, True)
 				if enemy.king.hp <=0:
 					raise KingIsDead()
 				return
@@ -123,6 +128,7 @@ class Table:
 
 class Game:
 	def play_round(round, attack_king=False):
+		print('*'*20)
 		print('Round {} start'.format(round)) 
 		player1.take_cards()
 		player2.take_cards()
@@ -143,14 +149,18 @@ class Game:
 				print('Draw!')
 				return
 
+			print("<>"*10)
 			print("Winner Player {} ".format(round_winner.name))
+			print("Winner cards: {}".format(round_winner.table_cards))
 			print("Loser Player {}".format(round_loser.name))
 			for card in round_winner.table_cards:
-				print("{} king {} damaged".format(round_loser.name, card.dmg))
-				card.attack(round_loser.king)
+				print("Loser king lost {} hp:".format(card.dmg))
+				card.attack(round_loser.king, True)
 				if round_loser.king.hp <=0:
 					raise KingIsDead()
-				return
+
+		round_winner.table_cards = []
+
 
 
 
